@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f47b20">
+<title>جيبلي | إدارة الطلبات</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--orange:#f47b20;--ink:#252525;--muted:#747474;--bg:#f5f5f4;--line:#e8e5e1;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
+header{background:linear-gradient(120deg,#f47b20,#ff9a3d);color:#fff;padding:22px 18px 28px;border-radius:0 0 24px 24px}
+.top{max-width:1050px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-size:27px;font-weight:900;letter-spacing:.3px}.tag{font-size:13px;opacity:.95;margin-top:5px}
+.pill{background:#ffffff2b;border:1px solid #ffffff55;border-radius:30px;padding:8px 12px;font-size:12px}
+main{max-width:1050px;margin:20px auto;padding:0 14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:-5px}
+.stat,.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 4px 14px #00000008}
+.stat small{color:var(--muted);display:block;font-size:12px}.stat strong{font-size:23px;display:block;margin-top:7px}
+.tabs{display:flex;gap:8px;overflow:auto;margin:18px 0}.tab{border:0;border-radius:30px;padding:10px 16px;background:#e9e6e2;color:#333;font-weight:700;white-space:nowrap;cursor:pointer}.tab.active{background:var(--ink);color:#fff}
+.panel h2{font-size:18px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field label{font-size:12px;color:#666;display:block;margin:0 0 6px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;font:inherit;font-size:14px;outline-color:var(--orange)}
+textarea{min-height:74px;resize:vertical}.full{grid-column:1/-1}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+button{font:inherit;cursor:pointer}.primary{background:var(--orange);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:800}.secondary{background:#f0eeeb;color:#333;border:0;border-radius:10px;padding:12px 16px}
+table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:right;padding:12px 9px;border-bottom:1px solid var(--line);font-size:13px}th{color:#777;font-weight:700;background:#faf9f8}
+.tablewrap{overflow:auto}.status{display:inline-block;background:#fff1e5;color:#a94b00;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.empty{padding:26px;text-align:center;color:#888}
+.note{color:#777;font-size:12px;line-height:1.8;margin-top:12px}
+.cardhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.hidden{display:none!important}
+footer{text-align:center;color:#999;font-size:11px;padding:25px}
+@media(max-width:600px){.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:11px}.stat strong{font-size:18px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.brand{font-size:23px}}
+</style>
+</head>
+<body>
+<header><div class="top"><div><div class="brand">🛵 جيبلي</div><div class="tag">شو بدك؟ جيبلي!</div></div><div class="pill">لوحة تشغيل الطلبات</div></div></header>
+<main>
+<section class="stats">
+ <div class="stat"><small>إجمالي الطلبات</small><strong id="count">0</strong></div>
+ <div class="stat"><small>طلبات قيد التنفيذ</small><strong id="active">0</strong></div>
+ <div class="stat"><small>إجمالي التوصيل</small><strong id="fees">0</strong></div>
+</section>
+<nav class="tabs">
+ <button class="tab active" data-tab="new">＋ طلب جديد</button>
+ <button class="tab" data-tab="orders">سجل الطلبات</button>
+</nav>
+<section id="new" class="panel">
+ <h2>تسجيل طلب جديد</h2>
+ <form id="orderForm">
+ <div class="grid">
+  <div class="field"><label>رقم الطلب</label><input id="orderNo" readonly></div>
+  <div class="field"><label>اسم الزبون</label><input id="customer" required value="جاسم"></div>
+  <div class="field"><label>رقم الهاتف</label><input id="phone" value="0966778899" inputmode="tel"></div>
+  <div class="field"><label>العنوان</label><input id="address" value="الميادين - سوق المغطي" required></div>
+  <div class="field"><label>المتجر / المطعم</label><input id="store" value="مطعم النور" required></div>
+  <div class="field"><label>المندوب</label><select id="rider"><option>غير محدد</option><option selected>المندوب 1</option><option>المندوب 2</option><option>المندوب 3</option><option>المندوب 4</option><option>المندوب 5</option></select></div>
+  <div class="field full"><label>تفاصيل الطلب</label><textarea id="details" required>شاورما عادي × 2</textarea></div>
+  <div class="field"><label>قيمة المشتريات (ل.س)</label><input id="purchase" type="number" min="0" value="25000" required></div>
+  <div class="field"><label>أجرة التوصيل (ل.س)</label><input id="delivery" type="number" min="0" value="5000" required></div>
+  <div class="field"><label>طريقة الدفع</label><select id="payment"><option selected>نقدي</option><option>إلكتروني</option></select></div>
+  <div class="field"><label>حالة الطلب</label><select id="status"><option>تم تعيين المندوب</option><option>جديد</option><option>بانتظار تأكيد الزبون</option><option>أرسل للمتجر</option><option>قيد التجهيز</option><option>جاهز للاستلام</option><option>استلمه المندوب</option><option>في الطريق</option><option>تم التسليم</option><option>ملغي</option></select></div>
+ </div>
+ <div class="actions"><button class="primary" type="submit">حفظ الطلب</button><button class="secondary" type="button" id="reset">تفريغ النموذج</button></div>
+ <div class="note">تحفظ هذه النسخة البيانات محليًا داخل المتصفح على هذا الجهاز. لا يوجد حتى الآن ربط سحابي أو مزامنة بين الأجهزة.</div>
+ </form>
+</section>
+<section id="orders" class="panel hidden">
+ <div class="cardhead"><h2>سجل الطلبات</h2><button class="secondary" id="export">تصدير CSV</button></div>
+ <div class="tablewrap"><table><thead><tr><th>الرقم</th><th>الزبون</th><th>المتجر</th><th>المندوب</th><th>الإجمالي</th><th>الحالة</th></tr></thead><tbody id="rows"></tbody></table></div>
+ <div id="empty" class="empty">لا توجد طلبات محفوظة بعد.</div>
+</section>
+</main>
+<footer>جيبلي · نموذج ويب أولي لإدارة الطلبات</footer>
+<script>
+const $=id=>document.getElementById(id);
+const KEY='jeebli_orders_v1';
+let orders=JSON.parse(localStorage.getItem(KEY)||'[]');
+function nextNo(){let n=orders.length+1;return 'JB-'+String(n).padStart(3,'0')}
+function total(){return (+$('purchase').value||0)+(+$('delivery').value||0)}
+function setNo(){$('orderNo').value=nextNo()}
+function render(){
+ $('count').textContent=orders.length;
+ $('active').textContent=orders.filter(o=>!['تم التسليم','ملغي'].includes(o.status)).length;
+ $('fees').textContent=orders.reduce((s,o)=>s+o.delivery,0).toLocaleString('en-US')+' ل.س';
+ $('rows').innerHTML=orders.slice().reverse().map(o=>`<tr><td>${o.no}</td><td>${esc(o.customer)}</td><td>${esc(o.store)}</td><td>${esc(o.rider)}</td><td>${o.total.toLocaleString('en-US')} ل.س</td><td><span class="status">${esc(o.status)}</span></td></tr>`).join('');
+ $('empty').classList.toggle('hidden',orders.length>0);
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));$('new').classList.toggle('hidden',b.dataset.tab!=='new');$('orders').classList.toggle('hidden',b.dataset.tab!=='orders')});
+$('orderForm').onsubmit=e=>{
+ e.preventDefault();
+ const o={no:nextNo(),customer:$('customer').value.trim(),phone:$('phone').value.trim(),address:$('address').value.trim(),store:$('store').value.trim(),rider:$('rider').value,details:$('details').value.trim(),purchase:+$('purchase').value,delivery:+$('delivery').value,total:total(),payment:$('payment').value,status:$('status').value,created:new Date().toISOString()};
+ orders.push(o);localStorage.setItem(KEY,JSON.stringify(orders));render();
+ alert('تم حفظ الطلب '+o.no+' على هذا الجهاز');
+ document.querySelector('[data-tab="orders"]').click();setNo();
+};
+$('reset').onclick=()=>{$('orderForm').reset();setNo()};
+$('export').onclick=()=>{
+ const head=['رقم الطلب','الزبون','الهاتف','العنوان','المتجر','التفاصيل','المشتريات','التوصيل','الإجمالي','الدفع','المندوب','الحالة'];
+ const lines=[head,...orders.map(o=>[o.no,o.customer,o.phone,o.address,o.store,o.details,o.purchase,o.delivery,o.total,o.payment,o.rider,o.status])];
+ const csv='\ufeff'+lines.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='jeebli-orders.csv';a.click();URL.revokeObjectURL(a.href);
+};
+setNo();render();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
